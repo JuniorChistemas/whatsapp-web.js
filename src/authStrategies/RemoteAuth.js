@@ -107,7 +107,9 @@ class RemoteAuth extends BaseAuthStrategy {
         if (pathExists) {
             await this.compressSession();
             const compressedSessionPath = path.join(this.dataPath, `${this.sessionName}.zip`);
-            await this.store.save({session: this.sessionName, filePath: compressedSessionPath});
+            const stats = await fs.promises.stat(compressedSessionPath);
+            const fileStream = fs.createReadStream(compressedSessionPath);
+            await this.store.save({session: this.sessionName, body: fileStream, contentLength: stats.size});
             await fs.promises.unlink(compressedSessionPath);
             await fs.promises.rm(`${this.tempDir}`, {
                 recursive: true,
