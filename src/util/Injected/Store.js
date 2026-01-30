@@ -53,7 +53,10 @@ exports.ExposeStore = () => {
     window.Store.MediaPrep = window.require('WAWebPrepRawMedia');
     window.Store.MediaObject = window.require('WAWebMediaStorage');
     window.Store.MediaTypes = window.require('WAWebMmsMediaTypes');
-    window.Store.MediaUpload = window.require('WAWebMediaMmsV4Upload');
+    window.Store.MediaUpload = {
+        ...window.require('WAWebMediaMmsV4Upload'),
+        ...window.require('WAWebStartMediaUploadQpl')
+    };
     window.Store.MediaUpdate = window.require('WAWebMediaUpdateMsg');
     window.Store.MsgKey = window.require('WAWebMsgKey');
     window.Store.OpaqueData = window.require('WAWebMediaOpaqueData');
@@ -217,6 +220,9 @@ exports.ExposeStore = () => {
         window.Store.Chat.findImpl = window.Store.Chat._find;
     }
 
+    if (!window.Store.ProfilePic) {
+        window.Store.ProfilePic = window.require('WAWebContactProfilePicThumbBridge');
+    }
     /**
      * Target options object description
      * @typedef {Object} TargetOptions
