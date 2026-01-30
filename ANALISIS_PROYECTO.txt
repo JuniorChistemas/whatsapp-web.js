@@ -1,0 +1,369 @@
+================================================================================
+                    ANÁLISIS DEL PROYECTO: WhatsApp-Web.js
+================================================================================
+
+INFORMACIÓN GENERAL DEL PROYECTO
+================================================================================
+
+Nombre:             whatsapp-web.js
+Versión:            1.34.6
+Descripción:        Library for interacting with the WhatsApp Web API
+Autor:              Pedro Lopez
+Licencia:           Apache-2.0
+Página Web:         https://wwebjs.dev/
+Repositorio:        https://github.com/pedroslopez/whatsapp-web.js
+
+
+DESCRIPCIÓN DEL PROYECTO
+================================================================================
+
+WhatsApp-Web.js es una librería de Node.js que permite interactuar con la API
+de WhatsApp Web. Es un cliente que opera a través del navegador WhatsApp Web,
+utilizando Puppeteer para lanzar la aplicación y acceder a sus funciones internas.
+
+La librería crea una instancia gestionada para reducir el riesgo de ser bloqueado,
+proporcionando acceso a casi todas las características de WhatsApp Web para ser
+utilizadas de forma dinámica en aplicaciones Node.js.
+
+IMPORTANTE: WhatsApp no permite bots o clientes no oficiales en su plataforma,
+por lo que no se garantiza que no será bloqueado al usar este método. Se recomienda
+usar con precaución.
+
+
+REQUISITOS Y DEPENDENCIAS
+================================================================================
+
+REQUISITOS MÍNIMOS:
+- Node.js v18 o superior
+
+DEPENDENCIAS PRINCIPALES:
+- @pedroslopez/moduleraid: ^5.0.2 - Herramienta para acceso a módulos
+- puppeteer: ^24.31.0 - Automatización de navegador Chrome/Chromium
+- fluent-ffmpeg: 2.1.3 - Procesamiento de video y audio
+- mime: ^3.0.0 - Detección de tipos MIME
+- node-fetch: ^2.6.9 - Cliente HTTP
+- node-webpmux: 3.1.7 - Manipulación de archivos WebP
+
+DEPENDENCIAS DE DESARROLLO:
+- mocha: ^9.0.2 - Framework de testing
+- chai: ^4.3.4 - Librería de aserciones
+- chai-as-promised: ^7.1.1 - Extensión de chai para promesas
+- eslint: ^8.4.1 - Linter de código
+- jsdoc: ^3.6.4 - Generador de documentación
+- sinon: ^13.0.1 - Librería de mocking/spying
+
+
+ESTRUCTURA DEL PROYECTO
+================================================================================
+
+/home/junior/development/whatsapp-web.js/
+├── src/
+│   ├── Client.js                    - Clase principal del cliente
+│   ├── authStrategies/              - Estrategias de autenticación
+│   │   ├── BaseAuthStrategy.js
+│   │   ├── LocalAuth.js             - Autenticación local
+│   │   ├── NoAuth.js                - Sin autenticación
+│   │   └── RemoteAuth.js            - Autenticación remota
+│   ├── structures/                  - Estructuras de datos
+│   │   ├── Chat.js                  - Representación de chat
+│   │   ├── PrivateChat.js           - Chat privado
+│   │   ├── GroupChat.js             - Chat grupal
+│   │   ├── Channel.js               - Canales
+│   │   ├── Message.js               - Mensajes
+│   │   ├── MessageMedia.js          - Medios en mensajes
+│   │   ├── Contact.js               - Contactos
+│   │   ├── PrivateContact.js        - Contactos privados
+│   │   ├── BusinessContact.js       - Contactos de negocio
+│   │   ├── ClientInfo.js            - Información del cliente
+│   │   ├── Location.js              - Ubicaciones
+│   │   ├── Poll.js                  - Encuestas
+│   │   ├── PollVote.js              - Votos en encuestas
+│   │   ├── Reaction.js              - Reacciones a mensajes
+│   │   ├── Call.js                  - Llamadas
+│   │   ├── Broadcast.js             - Broadcasts
+│   │   ├── List.js                  - Listas (deprecadas)
+│   │   ├── Buttons.js               - Botones (deprecados)
+│   │   ├── Label.js                 - Etiquetas
+│   │   ├── Order.js                 - Órdenes
+│   │   ├── Payment.js               - Pagos
+│   │   ├── Product.js               - Productos
+│   │   ├── ProductMetadata.js       - Metadatos de productos
+│   │   ├── ScheduledEvent.js        - Eventos programados
+│   │   ├── GroupNotification.js     - Notificaciones de grupo
+│   │   └── index.js                 - Exportaciones
+│   ├── factories/                   - Factories para crear instancias
+│   ├── util/                        - Utilidades
+│   │   ├── Constants.js             - Constantes del proyecto
+│   │   ├── Puppeteer.js             - Gestión de Puppeteer
+│   │   ├── Util.js                  - Funciones de utilidad
+│   │   ├── InterfaceController.js   - Control de interfaz
+│   │   └── Injected/                - Código inyectado en el navegador
+│   └── webCache/                    - Gestión de caché web
+├── tests/                           - Suite de tests
+├── docs/                            - Documentación generada
+├── example.js                       - Ejemplo de uso
+├── index.js                         - Punto de entrada principal
+├── index.d.ts                       - Definiciones TypeScript
+├── package.json                     - Configuración del proyecto
+├── README.md                        - Documentación principal
+├── shell.js                         - Shell interactivo
+└── CODE_OF_CONDUCT.md              - Código de conducta
+
+
+CARACTERÍSTICAS SOPORTADAS
+================================================================================
+
+✅ CARACTERÍSTICAS COMPLETAMENTE SOPORTADAS:
+
+Mensajería Básica:
+  - Envío de mensajes
+  - Recepción de mensajes
+  - Respuestas a mensajes
+  - Mensajes con menciones (@)
+
+Medios:
+  - Envío de imágenes
+  - Envío de audio
+  - Envío de documentos
+  - Envío de video (requiere Google Chrome)
+  - Envío de stickers
+  - Recepción de medios (imágenes, audio, video, documentos)
+
+Contactos y Chats:
+  - Envío de tarjetas de contacto
+  - Obtener información de contactos
+  - Obtener fotos de perfil
+  - Bloquear/desbloquear contactos
+
+Ubicación:
+  - Enviar ubicación
+  - Recibir ubicación
+
+Grupos:
+  - Unirse a grupos por invitación
+  - Obtener invitación para grupo
+  - Modificar información del grupo (asunto, descripción)
+  - Modificar configuración de grupo
+  - Añadir participantes
+  - Expulsar participantes
+  - Promover/degradar participantes
+
+Notificaciones y Gestión:
+  - Silenciar/desilenciar chats
+  - Reacciones a mensajes
+  - Encuestas y votación
+  - Canales
+  - Broadcasts
+  - Establecer mensaje de estado
+
+Dispositivos:
+  - Soporte Multi Device
+
+❌ CARACTERÍSTICAS NO SOPORTADAS / DEPRECADAS:
+
+  - Envío de listas (DEPRECATED)
+  - Envío de botones (DEPRECATED)
+
+🔜 CARACTERÍSTICAS PRÓXIMAS:
+
+  - Votación en encuestas
+  - Comunidades
+
+
+MÓDULOS PRINCIPALES
+================================================================================
+
+1. CLIENT (src/Client.js)
+   - Clase principal que gestiona la conexión y comunicación
+   - Maneja eventos (QR, ready, message, etc.)
+   - Controla autenticación
+   - Proporciona métodos para interactuar con WhatsApp
+
+2. ESTRATEGIAS DE AUTENTICACIÓN
+   - LocalAuth: Guarda sesiones localmente
+   - RemoteAuth: Guarda sesiones en remoto
+   - NoAuth: Sin persistencia de sesión
+
+3. ESTRUCTURAS DE DATOS
+   - Representan diferentes entidades de WhatsApp
+   - Proporcionan métodos para interactuar con ellas
+   - Incluyen información de cada entidad
+
+4. UTILIDADES
+   - Funciones para manejar Puppeteer
+   - Funciones auxiliares
+   - Inyección de código en el navegador
+   - Gestión de caché web
+
+5. FACTORIES
+   - Crean instancias de estructuras
+   - Procesamiento de datos del navegador
+
+
+SCRIPTS Y COMANDOS
+================================================================================
+
+npm test                    - Ejecutar tests con mocha
+npm run test-single         - Ejecutar un test específico
+npm run shell              - Lanzar shell interactivo con REPL
+npm run generate-docs      - Generar documentación con JSDoc
+
+
+EJEMPLO DE USO BÁSICO
+================================================================================
+
+const { Client } = require('whatsapp-web.js');
+
+const client = new Client();
+
+// Evento para mostrar código QR
+client.on('qr', (qr) => {
+    console.log('QR RECEIVED', qr);
+    // Generar código QR y escanear con teléfono
+});
+
+// Evento cuando cliente está listo
+client.on('ready', () => {
+    console.log('Client is ready!');
+});
+
+// Evento cuando se recibe un mensaje
+client.on('message', msg => {
+    if (msg.body == '!ping') {
+        msg.reply('pong');
+    }
+});
+
+// Inicializar cliente
+client.initialize();
+
+
+EXPORTACIONES PRINCIPALES (index.js)
+================================================================================
+
+Client                      - Cliente principal
+Chat                        - Clase de chat
+PrivateChat                 - Chat privado
+GroupChat                   - Chat de grupo
+Channel                     - Canal
+Message                     - Mensaje
+MessageMedia                - Medios de mensaje
+Contact                     - Contacto
+PrivateContact              - Contacto privado
+BusinessContact             - Contacto de negocio
+ClientInfo                  - Información del cliente
+Location                    - Ubicación
+Poll                        - Encuesta
+ScheduledEvent              - Evento programado
+ProductMetadata             - Metadatos de producto
+List                        - Lista
+Buttons                     - Botones
+Broadcast                   - Broadcast
+
+Estrategias de Autenticación:
+NoAuth                      - Sin autenticación
+LocalAuth                   - Autenticación local
+RemoteAuth                  - Autenticación remota
+
+
+TECNOLOGÍAS Y HERRAMIENTAS
+================================================================================
+
+Frontend:
+- Puppeteer: Automatización de navegador
+- Chromium/Chrome: Motor de navegación
+
+Backend:
+- Node.js: Runtime de JavaScript
+- FFmpeg: Procesamiento de medios
+
+Testing:
+- Mocha: Framework de testing
+- Chai: Aserciones
+- Sinon: Mocking/Spying
+
+Documentación:
+- JSDoc: Documentación de código
+
+Herramientas:
+- ESLint: Linting de código
+- npm: Gestor de paquetes
+
+
+INFORMACIÓN TÉCNICA
+================================================================================
+
+Punto de Entrada:         index.js
+Definiciones TypeScript:  index.d.ts
+Versión Actual:           1.34.6
+Soporte WhatsApp Web:     2.3000.1032244369
+
+ARQUITECTURA:
+- Basada en eventos (EventEmitter de Node.js)
+- Inyección de código en el navegador
+- Control remoto mediante Puppeteer
+- Persistencia de sesiones configurable
+
+
+CONTRIBUCIÓN Y SOPORTE
+================================================================================
+
+Repositorio:        https://github.com/pedroslopez/whatsapp-web.js
+Discord Server:     https://discord.gg/H7DqQs4
+Guía:               https://guide.wwebjs.dev/guide
+Documentación:      https://docs.wwebjs.dev/
+npm Package:        https://www.npmjs.com/package/whatsapp-web.js
+
+Formas de Soportar:
+- GitHub Sponsors: https://github.com/sponsors/pedroslopez
+- PayPal: https://www.paypal.me/psla/
+- DigitalOcean Referral: https://m.do.co/c/73f906a36ed4
+
+
+IMPORTANTE - DISCLAIMER
+================================================================================
+
+Este proyecto NO está afiliado, asociado, autorizado, respaldado por, o de 
+ninguna manera oficialmente conectado con WhatsApp o sus subsidiarias o afiliados.
+
+El sitio web oficial de WhatsApp se encuentra en https://whatsapp.com
+
+"WhatsApp" y nombres, marcas, emblemas e imágenes relacionados son marcas 
+registradas de sus respectivos propietarios.
+
+NO SE GARANTIZA que no será bloqueado al usar este método. WhatsApp no permite 
+bots o clientes no oficiales en su plataforma, por lo que NO debe considerarse 
+totalmente seguro.
+
+
+LICENCIA
+================================================================================
+
+Copyright 2019 Pedro S Lopez
+
+Licensed under the Apache License, Version 2.0
+http://www.apache.org/licenses/LICENSE-2.0
+
+Puede usar este proyecto bajo los términos de la licencia Apache 2.0.
+
+
+ESTADO DEL PROYECTO
+================================================================================
+
+Este es un fork creado para añadir correcciones más rápidamente a la rama principal.
+
+El proyecto está activamente mantenido y cuenta con:
+- Soporte para múltiples dispositivos
+- Documentación completa
+- Comunidad activa en Discord
+- Tests y validación continua
+- Actualización regular para compatibilidad con WhatsApp Web
+
+
+================================================================================
+                            FIN DEL ANÁLISIS
+================================================================================
+Fecha de Análisis: 30 de Enero de 2026
+Proyecto: whatsapp-web.js v1.34.6
+Documentación Completa: Disponible en https://wwebjs.dev/
+================================================================================
